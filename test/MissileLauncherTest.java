@@ -8,4 +8,20 @@ public class MissileLauncherTest {
     public void givenExpiredLaunchCodes_missileIsNotLaunched() {
 
     }
+
+    class DummyMissile implements MissileLauncher.Missile {
+
+        @Override
+        public void launch() {
+            throw new RuntimeException();
+        }
+    }
+
+    class ExpiredLaunchCode implements MissileLauncher.LaunchCode {
+        @Override
+        public boolean isExpired() {
+            return true;
+        }
+    }
+
 }

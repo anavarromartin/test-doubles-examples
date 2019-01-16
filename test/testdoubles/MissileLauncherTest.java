@@ -4,6 +4,7 @@ import org.junit.Test;
 import testdoubles.MissileLauncher.LaunchCode;
 import testdoubles.MissileLauncher.Missile;
 
+import static org.junit.Assert.assertFalse;
 import static testdoubles.MissileLauncher.launchMissile;
 
 public class MissileLauncherTest {
@@ -12,7 +13,11 @@ public class MissileLauncherTest {
 
     @Test
     public void givenExpiredLaunchCodes_missileIsNotLaunched() {
-        launchMissile(new DummyMissile(), expiredLaunchCode);
+        MissileSpy missileSpy = new MissileSpy();
+        launchMissile(missileSpy, expiredLaunchCode);
+
+        assertFalse(missileSpy.launchWasCalled());
+
     }
 
     class MissileSpy implements Missile {

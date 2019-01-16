@@ -3,13 +3,17 @@ package testdoubles;
 class MissileLauncher {
 
     static void launchMissile(Missile missile, LaunchCode code) {
-        try {
+        if (code.isExpired()) {
+            missile.disable();
+        } else {
             missile.launch();
-        } catch (Exception e) {}
+        }
     }
 
     interface Missile {
         void launch();
+
+        void disable();
     }
 
     interface LaunchCode {

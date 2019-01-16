@@ -4,6 +4,7 @@ import org.junit.Test;
 import testdoubles.MissileLauncher.LaunchCode;
 import testdoubles.MissileLauncher.Missile;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static testdoubles.MissileLauncher.launchMissile;
 
@@ -17,20 +18,31 @@ public class MissileLauncherTest {
         launchMissile(missileSpy, expiredLaunchCode);
 
         assertFalse(missileSpy.launchWasCalled());
+        assertTrue(missileSpy.disableWasCalled());
 
     }
 
     class MissileSpy implements Missile {
 
         private boolean launchWasCalled = false;
+        private boolean disableWasCalled = false;
 
         @Override
         public void launch() {
             launchWasCalled = true;
         }
 
+        @Override
+        public void disable() {
+            disableWasCalled = true;
+        }
+
         boolean launchWasCalled() {
             return launchWasCalled;
+        }
+
+        boolean disableWasCalled() {
+            return disableWasCalled;
         }
     }
 
@@ -39,6 +51,11 @@ public class MissileLauncherTest {
         @Override
         public void launch() {
             throw new RuntimeException();
+        }
+
+        @Override
+        public void disable() {
+
         }
     }
 

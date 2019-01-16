@@ -2,47 +2,51 @@ package testdoubles;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.*;
 import static testdoubles.MissileLauncher.launchMissile;
 
+@RunWith(MockitoJUnitRunner.class)
 public class MissileLauncherTest {
 
     final LaunchCode expiredLaunchCode = new ExpiredLaunchCode();
     final LaunchCode unsignedLaunchCode = new UnsignedLaunchCode();
     final LaunchCode validLaunchCode = new ValidLaunchCode();
 
-    UsedLaunchCodes usedLaunchCodes;
-    MissileSpy missileSpy;
-    MissileMock missileMock;
+    private UsedLaunchCodes usedLaunchCodes;
+
+    @Mock
+    private Missile missileSpy;
 
     @Before
     public void setUp() {
-        missileSpy = new MissileSpy();
-        missileMock = new MissileMock();
         usedLaunchCodes = new FakeUsedLaunchCodes();
     }
 
     @Test
     public void givenExpiredLaunchCodes_codeRedAbort() {
-        launchMissile(missileMock, expiredLaunchCode, usedLaunchCodes);
+        launchMissile(missileSpy, expiredLaunchCode, usedLaunchCodes);
 
-        missileMock.verifyRedCodeAbort();
+        verifyCodeRedAbort();
     }
 
     @Test
     public void givenUnsignedLaunchCodes_codeRedAbort() {
-        launchMissile(missileMock, unsignedLaunchCode, usedLaunchCodes);
+        launchMissile(missileSpy, unsignedLaunchCode, usedLaunchCodes);
 
-        missileMock.verifyRedCodeAbort();
+        verifyCodeRedAbort();
     }
 
     @Test
     public void givenValidLaunchCodes_missileIsLaunched() {
         launchMissile(missileSpy, validLaunchCode, usedLaunchCodes);
 
-        assertTrue(missileSpy.launchWasCalled());
+        verify(missileSpy).launch();
     }
 
     @Test
@@ -50,9 +54,14 @@ public class MissileLauncherTest {
         Missile missile = new MissileMock();
 
         launchMissile(missile, validLaunchCode, usedLaunchCodes);
-        launchMissile(missileMock, validLaunchCode, usedLaunchCodes);
+        launchMissile(missileSpy, validLaunchCode, usedLaunchCodes);
 
-        missileMock.verifyRedCodeAbort();
+        verifyCodeRedAbort();
+    }
+
+    private void verifyCodeRedAbort() {
+        verify(missileSpy, times(0)).launch();
+        verify(missileSpy).disable();
     }
 
     class MissileMock implements Missile {

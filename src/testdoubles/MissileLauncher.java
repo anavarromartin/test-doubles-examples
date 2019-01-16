@@ -10,21 +10,6 @@ class MissileLauncher {
         }
     }
 
-    interface Missile {
-        void launch();
-
-        void disable();
-    }
-
-    static class LaunchCode {
-        public boolean isExpired() {
-            return false;
-        }
-
-        public boolean isUnsigned() {
-            return false;
-        }
-    }
 }
 
 

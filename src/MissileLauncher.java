@@ -4,16 +4,6 @@ class MissileLauncher {
         missile.launch();
     }
 
-    interface Missile {
-
-        void launch();
-
-    }
-
-    interface LaunchCode {
-
-        boolean isExpired();
-    }
 }
 
 

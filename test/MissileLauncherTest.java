@@ -1,7 +1,5 @@
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class MissileLauncherTest {
 
     @Test
@@ -9,7 +7,7 @@ public class MissileLauncherTest {
 
     }
 
-    class DummyMissile implements MissileLauncher.Missile {
+    class DummyMissile implements Missile {
 
         @Override
         public void launch() {
@@ -17,7 +15,7 @@ public class MissileLauncherTest {
         }
     }
 
-    class ExpiredLaunchCode implements MissileLauncher.LaunchCode {
+    class ExpiredLaunchCode implements LaunchCode {
         @Override
         public boolean isExpired() {
             return true;

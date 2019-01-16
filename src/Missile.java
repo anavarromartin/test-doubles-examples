@@ -1,0 +1,5 @@
+interface Missile {
+
+    void launch();
+
+}

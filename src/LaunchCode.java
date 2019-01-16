@@ -1,0 +1,4 @@
+interface LaunchCode {
+
+    boolean isExpired();
+}

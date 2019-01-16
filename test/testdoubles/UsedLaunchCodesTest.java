@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class UsedLaunchCodesTest {
 
-    LaunchCode launchCode = new LaunchCode();
+    private LaunchCode launchCode = new LaunchCode();
 
     @Test
     public void contains() {

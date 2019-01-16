@@ -8,13 +8,6 @@ class MissileLauncher {
         } catch (Exception e) {}
     }
 
-    interface Missile {
-        void launch();
-    }
-
-    interface LaunchCode {
-        boolean isExpired();
-    }
 }
 
 

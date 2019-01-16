@@ -13,6 +13,7 @@ public class MissileLauncherTest {
     final LaunchCode unsignedLaunchCode = new UnsignedLaunchCode();
     final LaunchCode validLaunchCode = new ValidLaunchCode();
 
+    UsedLaunchCodes usedLaunchCodes;
     MissileSpy missileSpy;
     MissileMock missileMock;
 
@@ -20,27 +21,38 @@ public class MissileLauncherTest {
     public void setUp() {
         missileSpy = new MissileSpy();
         missileMock = new MissileMock();
+        usedLaunchCodes = new FakeUsedLaunchCodes();
     }
 
     @Test
     public void givenExpiredLaunchCodes_codeRedAbort() {
-        launchMissile(missileMock, expiredLaunchCode);
+        launchMissile(missileMock, expiredLaunchCode, usedLaunchCodes);
 
         missileMock.verifyRedCodeAbort();
     }
 
     @Test
     public void givenUnsignedLaunchCodes_codeRedAbort() {
-        launchMissile(missileMock, unsignedLaunchCode);
+        launchMissile(missileMock, unsignedLaunchCode, usedLaunchCodes);
 
         missileMock.verifyRedCodeAbort();
     }
 
     @Test
     public void givenValidLaunchCodes_missileIsLaunched() {
-        launchMissile(missileSpy, validLaunchCode);
+        launchMissile(missileSpy, validLaunchCode, usedLaunchCodes);
 
         assertTrue(missileSpy.launchWasCalled());
+    }
+
+    @Test
+    public void givenReusedLaunchCodes_codeRedAbort() {
+        Missile missile = new MissileMock();
+
+        launchMissile(missile, validLaunchCode, usedLaunchCodes);
+        launchMissile(missileMock, validLaunchCode, usedLaunchCodes);
+
+        missileMock.verifyRedCodeAbort();
     }
 
     class MissileMock implements Missile {

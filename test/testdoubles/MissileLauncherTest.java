@@ -2,6 +2,7 @@ package testdoubles;
 
 import org.junit.Test;
 import testdoubles.MissileLauncher.LaunchCode;
+import testdoubles.MissileLauncher.Missile;
 
 import static testdoubles.MissileLauncher.launchMissile;
 
@@ -14,7 +15,21 @@ public class MissileLauncherTest {
         launchMissile(new DummyMissile(), expiredLaunchCode);
     }
 
-    class DummyMissile implements MissileLauncher.Missile {
+    class MissileSpy implements Missile {
+
+        private boolean launchWasCalled = false;
+
+        @Override
+        public void launch() {
+            launchWasCalled = true;
+        }
+
+        boolean launchWasCalled() {
+            return launchWasCalled;
+        }
+    }
+
+    class DummyMissile implements Missile {
 
         @Override
         public void launch() {

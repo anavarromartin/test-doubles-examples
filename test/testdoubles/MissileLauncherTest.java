@@ -11,25 +11,36 @@ public class MissileLauncherTest {
 
     final LaunchCode expiredLaunchCode = new ExpiredLaunchCode();
     final LaunchCode unsignedLaunchCode = new UnsignedLaunchCode();
+    final LaunchCode validLaunchCode = new ValidLaunchCode();
+
+    MissileSpy missileSpy;
     MissileMock missileMock;
 
     @Before
     public void setUp() {
+        missileSpy = new MissileSpy();
         missileMock = new MissileMock();
     }
 
     @Test
-    public void givenExpiredLaunchCodes_missileIsNotLaunched() {
+    public void givenExpiredLaunchCodes_codeRedAbort() {
         launchMissile(missileMock, expiredLaunchCode);
 
         missileMock.verifyRedCodeAbort();
     }
 
     @Test
-    public void givenUnsignedLaunchCodes_missileIsNotLaunched() {
+    public void givenUnsignedLaunchCodes_codeRedAbort() {
         launchMissile(missileMock, unsignedLaunchCode);
 
         missileMock.verifyRedCodeAbort();
+    }
+
+    @Test
+    public void givenValidLaunchCodes_missileIsLaunched() {
+        launchMissile(missileSpy, validLaunchCode);
+
+        assertTrue(missileSpy.launchWasCalled());
     }
 
     class MissileMock implements Missile {
@@ -100,6 +111,18 @@ public class MissileLauncherTest {
         @Override
         public boolean isUnsigned() {
             return true;
+        }
+    }
+
+    class ValidLaunchCode extends LaunchCode {
+        @Override
+        public boolean isExpired() {
+            return false;
+        }
+
+        @Override
+        public boolean isUnsigned() {
+            return false;
         }
     }
 }

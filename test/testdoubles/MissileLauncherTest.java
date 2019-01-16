@@ -1,8 +1,6 @@
 package testdoubles;
 
 import org.junit.Test;
-import testdoubles.MissileLauncher.LaunchCode;
-import testdoubles.MissileLauncher.Missile;
 
 import static org.junit.Assert.assertFalse;
 import static testdoubles.MissileLauncher.launchMissile;

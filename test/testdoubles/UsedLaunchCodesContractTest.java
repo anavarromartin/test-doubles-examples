@@ -10,7 +10,7 @@ public abstract class UsedLaunchCodesContractTest {
     protected abstract UsedLaunchCodes createUsedLaunchCodes();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         usedLaunchCodes = createUsedLaunchCodes();
     }
 

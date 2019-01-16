@@ -12,6 +12,7 @@ import static testdoubles.MissileLauncher.launchMissile;
 public class MissileLauncherTest {
 
     final LaunchCode expiredLaunchCode = new ExpiredLaunchCode();
+    final LaunchCode unsignedLaunchCode = new UnsignedLaunchCode();
     MissileMock missileMock;
 
     @Before
@@ -24,7 +25,13 @@ public class MissileLauncherTest {
         launchMissile(missileMock, expiredLaunchCode);
 
         missileMock.verifyRedCodeAbort();
+    }
 
+    @Test
+    public void givenUnsignedLaunchCodes_missileIsNotLaunched() {
+        launchMissile(missileMock, unsignedLaunchCode);
+
+        missileMock.verifyRedCodeAbort();
     }
 
     class MissileMock implements Missile {
@@ -84,11 +91,17 @@ public class MissileLauncherTest {
         }
     }
 
-    class ExpiredLaunchCode implements LaunchCode {
+    class ExpiredLaunchCode extends LaunchCode {
         @Override
         public boolean isExpired() {
             return true;
         }
     }
 
+    class UnsignedLaunchCode extends LaunchCode {
+        @Override
+        public boolean isUnsigned() {
+            return true;
+        }
+    }
 }

@@ -3,7 +3,7 @@ package testdoubles;
 class MissileLauncher {
 
     static void launchMissile(Missile missile, LaunchCode code) {
-        if (code.isExpired()) {
+        if (code.isExpired() || code.isUnsigned()) {
             missile.disable();
         } else {
             missile.launch();
@@ -16,8 +16,14 @@ class MissileLauncher {
         void disable();
     }
 
-    interface LaunchCode {
-        boolean isExpired();
+    static class LaunchCode {
+        public boolean isExpired() {
+            return false;
+        }
+
+        public boolean isUnsigned() {
+            return false;
+        }
     }
 }
 

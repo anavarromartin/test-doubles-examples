@@ -1,5 +1,6 @@
 package testdoubles;
 
+import org.junit.Before;
 import org.junit.Test;
 import testdoubles.MissileLauncher.LaunchCode;
 import testdoubles.MissileLauncher.Missile;
@@ -11,15 +12,39 @@ import static testdoubles.MissileLauncher.launchMissile;
 public class MissileLauncherTest {
 
     final LaunchCode expiredLaunchCode = new ExpiredLaunchCode();
+    MissileMock missileMock;
+
+    @Before
+    public void setUp() {
+        missileMock = new MissileMock();
+    }
 
     @Test
     public void givenExpiredLaunchCodes_missileIsNotLaunched() {
-        MissileSpy missileSpy = new MissileSpy();
-        launchMissile(missileSpy, expiredLaunchCode);
+        launchMissile(missileMock, expiredLaunchCode);
 
-        assertFalse(missileSpy.launchWasCalled());
-        assertTrue(missileSpy.disableWasCalled());
+        missileMock.verifyRedCodeAbort();
 
+    }
+
+    class MissileMock implements Missile {
+        private boolean launchWasCalled = false;
+        private boolean disableWasCalled = false;
+
+        @Override
+        public void launch() {
+            launchWasCalled = true;
+        }
+
+        @Override
+        public void disable() {
+            disableWasCalled = true;
+        }
+
+        public void verifyRedCodeAbort() {
+            assertFalse(launchWasCalled);
+            assertTrue(disableWasCalled);
+        }
     }
 
     class MissileSpy implements Missile {

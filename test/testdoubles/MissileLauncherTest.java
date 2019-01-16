@@ -2,8 +2,6 @@ package testdoubles;
 
 import org.junit.Before;
 import org.junit.Test;
-import testdoubles.MissileLauncher.LaunchCode;
-import testdoubles.MissileLauncher.Missile;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;

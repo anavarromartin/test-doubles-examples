@@ -1,3 +1,5 @@
+package testdouble;
+
 class LaunchCode {
 
 }

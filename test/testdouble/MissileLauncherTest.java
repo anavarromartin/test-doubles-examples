@@ -1,11 +1,12 @@
-import org.junit.Test;
+package testdouble;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class MissileLauncherTest {
 
     @Test
     public void givenExpiredLaunchCodes_missileIsNotLaunched() {
-
     }
+
+
 }

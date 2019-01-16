@@ -14,10 +14,6 @@ import static testdoubles.MissileLauncher.launchMissile;
 @RunWith(MockitoJUnitRunner.class)
 public class MissileLauncherTest {
 
-    final LaunchCode expiredLaunchCode = new ExpiredLaunchCode();
-    final LaunchCode unsignedLaunchCode = new UnsignedLaunchCode();
-    final LaunchCode validLaunchCode = new ValidLaunchCode();
-
     private UsedLaunchCodes usedLaunchCodes;
 
     @Mock
@@ -30,6 +26,9 @@ public class MissileLauncherTest {
 
     @Test
     public void givenExpiredLaunchCodes_codeRedAbort() {
+        LaunchCode expiredLaunchCode = mock(LaunchCode.class);
+        when(expiredLaunchCode.isExpired()).thenReturn(true);
+
         launchMissile(missileSpy, expiredLaunchCode, usedLaunchCodes);
 
         verifyCodeRedAbort();
@@ -37,6 +36,9 @@ public class MissileLauncherTest {
 
     @Test
     public void givenUnsignedLaunchCodes_codeRedAbort() {
+        LaunchCode unsignedLaunchCode = mock(LaunchCode.class);
+        when(unsignedLaunchCode.isUnsigned()).thenReturn(true);
+
         launchMissile(missileSpy, unsignedLaunchCode, usedLaunchCodes);
 
         verifyCodeRedAbort();
@@ -44,6 +46,8 @@ public class MissileLauncherTest {
 
     @Test
     public void givenValidLaunchCodes_missileIsLaunched() {
+        LaunchCode validLaunchCode = getValidLaunchCode();
+
         launchMissile(missileSpy, validLaunchCode, usedLaunchCodes);
 
         verify(missileSpy).launch();
@@ -51,7 +55,8 @@ public class MissileLauncherTest {
 
     @Test
     public void givenReusedLaunchCodes_codeRedAbort() {
-        Missile missile = new MissileMock();
+        LaunchCode validLaunchCode = getValidLaunchCode();
+        Missile missile = mock(Missile.class);
 
         launchMissile(missile, validLaunchCode, usedLaunchCodes);
         launchMissile(missileSpy, validLaunchCode, usedLaunchCodes);
@@ -59,91 +64,15 @@ public class MissileLauncherTest {
         verifyCodeRedAbort();
     }
 
+    private LaunchCode getValidLaunchCode() {
+        LaunchCode validLaunchCode = mock(LaunchCode.class);
+        when(validLaunchCode.isExpired()).thenReturn(false);
+        when(validLaunchCode.isUnsigned()).thenReturn(false);
+        return validLaunchCode;
+    }
+
     private void verifyCodeRedAbort() {
         verify(missileSpy, times(0)).launch();
         verify(missileSpy).disable();
-    }
-
-    class MissileMock implements Missile {
-        private boolean launchWasCalled = false;
-        private boolean disableWasCalled = false;
-
-        @Override
-        public void launch() {
-            launchWasCalled = true;
-        }
-
-        @Override
-        public void disable() {
-            disableWasCalled = true;
-        }
-
-        public void verifyRedCodeAbort() {
-            assertFalse(launchWasCalled);
-            assertTrue(disableWasCalled);
-        }
-    }
-
-    class MissileSpy implements Missile {
-
-        private boolean launchWasCalled = false;
-        private boolean disableWasCalled = false;
-
-        @Override
-        public void launch() {
-            launchWasCalled = true;
-        }
-
-        @Override
-        public void disable() {
-            disableWasCalled = true;
-        }
-
-        boolean launchWasCalled() {
-            return launchWasCalled;
-        }
-
-        boolean disableWasCalled() {
-            return disableWasCalled;
-        }
-    }
-
-    class DummyMissile implements Missile {
-
-        @Override
-        public void launch() {
-            throw new RuntimeException();
-        }
-
-        @Override
-        public void disable() {
-
-        }
-    }
-
-    class ExpiredLaunchCode extends LaunchCode {
-        @Override
-        public boolean isExpired() {
-            return true;
-        }
-    }
-
-    class UnsignedLaunchCode extends LaunchCode {
-        @Override
-        public boolean isUnsigned() {
-            return true;
-        }
-    }
-
-    class ValidLaunchCode extends LaunchCode {
-        @Override
-        public boolean isExpired() {
-            return false;
-        }
-
-        @Override
-        public boolean isUnsigned() {
-            return false;
-        }
     }
 }

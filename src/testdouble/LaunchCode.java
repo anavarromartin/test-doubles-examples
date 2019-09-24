@@ -1,12 +1,12 @@
 package testdouble;
 
-class LaunchCode {
+public class LaunchCode {
 
-    boolean isExpired() {
+    public boolean isExpired() {
         return false;
     }
 
-    boolean isUnsigned() {
+    public boolean isUnsigned() {
         return false;
     }
 }
